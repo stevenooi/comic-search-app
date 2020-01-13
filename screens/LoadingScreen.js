@@ -58,16 +58,19 @@ export default function LoadingScreen({ navigation }) {
     });
   }
 
+  let dataAll = [];
   function checkComplete() {
-    if(count === totalCount || count > 200) navigation.navigate('Home');
+    if(count === totalCount) {
+      setState(dataAll, 'data');
+      navigation.navigate('Home');
+    }
   }
 
   async function getDataByReleaseDate(date) {
     axios.get(`https://api.shortboxed.com/comics/v1/release_date${date}`)
     .then(function (response) {
       count++;
-      const data = getState('data');
-      setState(data.concat(response.data.comics), 'data');
+      dataAll = dataAll.concat(getState('data'));
       checkComplete();
     })
     .catch(function (error) {
